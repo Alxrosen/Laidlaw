@@ -13,9 +13,8 @@ or found guilty of breaking any of the prison rules?
 '''
 
 ''' 
-*Templeate Changes*
-Survey Responeses (if different)
-v2517 --> question used
+Changes to Template
+v2509 --> question used
 plt.title
 plt.title (again)
 '''
@@ -30,7 +29,7 @@ yc_yv = yescategory['v2517'].value_counts().get('Yes', 0)
 yc_nv = yescategory['v2517'].value_counts().get('No', 0)
 yc_dkv = yescategory['v2517'].value_counts().get('Don\'t know', 0)
 yc_rv = yescategory['v2517'].value_counts().get('Refused', 0)
-yc_bv = yescategory['v2509'].value_counts().get('Blank', 0)
+yc_bv = yescategory['v2517'].value_counts().get('Blank', 0)
 
 # Calculates Percentages
 yescategory_count = yc_yv + yc_nv + yc_dkv + yc_rv + yc_bv
@@ -64,7 +63,7 @@ nc_yv = nocategory['v2517'].value_counts().get('Yes', 0)
 nc_nv = nocategory['v2517'].value_counts().get('No', 0)
 nc_dkv = nocategory['v2517'].value_counts().get('Don\'t know', 0)
 nc_rv = nocategory['v2517'].value_counts().get('Refused', 0)
-nc_bv = nocategory['v2509'].value_counts().get('Blank', 0)
+nc_bv = nocategory['v2517'].value_counts().get('Blank', 0)
 
 # Calculates Percentages
 nocategory_count = nc_yv + nc_nv + nc_dkv + nc_rv + nc_bv

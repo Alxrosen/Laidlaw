@@ -5,10 +5,9 @@ import matplotlib.pyplot as plt
 df = pd.read_csv('/Users/alexrosen/Laidlaw/data/prison_survey.csv')
 
 '''
-v2500 -> S10Q11A: Since your admission, have you ever been in any other education program? Exclude
-vocational training.
+v2508 -> S10Q11C_1: Since your admission, have you completed your GED?
 
-v2517 --> S10Q13A: Since your admission [MOST RECENT ADMISSION DATE], have you been written up
+V2517 --> S10Q13A: Since your admission [MOST RECENT ADMISSION DATE], have you been written up
 or found guilty of breaking any of the prison rules?
 '''
 
@@ -22,7 +21,7 @@ plt.title (again)
 survey_responses = ['Yes', 'No', 'Don\'t know','Refused', 'Blank']
 
 # Creates data frame for "YES category"
-yescategory = df[df['v2500'] == 'Yes']
+yescategory = df[df['v2508'] == 'Yes']
 
 # Gets the counts by each of the violation answer categories
 yc_yv = yescategory['v2517'].value_counts().get('Yes', 0)
@@ -46,7 +45,7 @@ yc_percentages = [
 plt.subplot(1,2,1)
 bars1 = plt.bar(survey_responses, yc_percentages)
 plt.ylabel("% of Total")
-plt.title("Rule Violations By Educational Group Members")
+plt.title("Rule Violations By GED Group Members")
 plt.bar_label(
     bars1,
     labels=[f"{x:.1%}" for x in yc_percentages],  
@@ -56,7 +55,7 @@ plt.bar_label(
 
 
 # Creates data frame for "NO category"
-nocategory = df[df['v2500'] == 'No']
+nocategory = df[df['v2508'] == 'No']
 
 # Gets the counts by each of the violation answer categories
 nc_yv = nocategory['v2517'].value_counts().get('Yes', 0)
@@ -79,7 +78,7 @@ nc_percentages = [
 plt.subplot(1,2,2)
 bars2 = plt.bar(survey_responses, nc_percentages)
 plt.ylabel("% of Total")
-plt.title("Rule Violations By NON-Educational Group Members")
+plt.title("Rule Violations By NON-GED Group Members")
 plt.bar_label(
     bars2,
     labels=[f"{x:.1%}" for x in nc_percentages],  

@@ -18,7 +18,7 @@ yr_yv = yesreligion['v2517'].value_counts().get('Yes', 0)
 yr_nv = yesreligion['v2517'].value_counts().get('No', 0)
 yr_dkv = yesreligion['v2517'].value_counts().get('Don\'t know', 0)
 yr_rv = yesreligion['v2517'].value_counts().get('Refused', 0)
-yr_bv = yesreligion['v2509'].value_counts().get('Blank', 0)
+yr_bv = yesreligion['v2517'].value_counts().get('Blank', 0)
 
 # Calculates Percentages
 yesreligion_count = yr_yv + yr_nv + yr_dkv + yr_rv + yr_bv
