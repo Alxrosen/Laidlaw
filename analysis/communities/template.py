@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 df = pd.read_csv('/Users/alexrosen/Laidlaw/data/prison_survey.csv')
 
 '''
-v2517 -> S10Q12A_1: Since your admission to prison on [MOST RECENT ADMISSION DATE], have you
+v2509 -> S10Q12A_1: Since your admission to prison on [MOST RECENT ADMISSION DATE], have you
 joined or participated in - A Bible club or other religious study group (including Muslims)?
 
-2517 --> S10Q13A: Since your admission [MOST RECENT ADMISSION DATE], have you been written up
+V2517 --> S10Q13A: Since your admission [MOST RECENT ADMISSION DATE], have you been written up
 or found guilty of breaking any of the prison rules?
 '''
 
