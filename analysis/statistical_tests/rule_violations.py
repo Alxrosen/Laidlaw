@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
@@ -17,13 +18,15 @@ variables = df[['v2500',                            # Education
                 'v2513',                            # Vocational (Ever, NOT currently)
                 'v2517',                            # Rule violations
                 'v0029', 'v0030', 'v0031', 'v0032', 'v0033', 'v0034', 'v0035', #Race
-                'v0018',                            #Latino / Hispanic
+                'v0018',                            # Latino / Hispanic
                 'v0715',                            # Sentence Length
+                'v0717',                            # Sentence Length Changed to 2004 Flag
                 'v0004',                            # Gender
-                'v0013',                             # age
+                'v0013',                            # age
                 'v0046',                            # U.S. born
-                'v0058'                             #Marital Status
-                #'v1056'                             # State
+                'v0058',                            # Marital Status
+                #'v1056'                            # State
+                'v2984'                             # Facility ID
                 ]]
 
 #limit to Yes and No for educational group  --> TODO June 21st Is this correct??
@@ -201,7 +204,13 @@ df_statsbinary = df_statsbinary.rename(columns={
 })
 '''
 
-# Term sentence --> approximately how many years they have been incarcerated
+# Sentence sentence --> approximately how many years they have been incarcerated
+df_statsbinary['v0717'] = df_statsbinary['v0717'].apply(lambda v: 1 if v == "Year field changed to 2004" else 0)
+df_statsbinary['v0715'] = np.where(
+    df_statsbinary['v0717'] == 1,  
+    2004,                       
+    df_statsbinary['v0715']      
+)
 df_statsbinary['v0715'] = df_statsbinary['v0715'].apply(lambda v: int(v) if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -212,6 +221,7 @@ df_statsbinary['v0715'] = df_statsbinary['v0715'].apply(lambda v: 2004 - v)
 df_statsbinary = df_statsbinary.rename(columns={
     'v0715': 'Sentence Length' 
 })
+
 
 # convert gender to binary
 df_statsbinary['v0004'] = df_statsbinary['v0004'].apply(lambda v: v if not \
@@ -304,6 +314,28 @@ marital_dummies = pd.get_dummies(df_statsbinary['v1056'], prefix='state', dtype=
 df_statsbinary = pd.concat([df_statsbinary, marital_dummies], axis=1)
 df_statsbinary = df_statsbinary.drop('v1056', axis=1)
 '''
+
+# By-Facility Factor -- 
+# '''
+# Dropped Federal Facilities 
+# 101 - 387 (State Facilities)
+# 401 - 439 (Federal Facilities)
+# '''
+#Creates multicollinearity (or dummy variable trap?)
+print(df_statsbinary['v2984'].value_counts())
+df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if not \
+                                            (v == 'Blank' or
+                                            v == 'Don\'t know' or
+                                            v == 'Refused')
+                                            else None)
+df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if v < 401 else None) 
+df_statsbinary = df_statsbinary.dropna(subset=['v2984'])
+marital_dummies = pd.get_dummies(df_statsbinary['v2984'], prefix='facility', drop_first=True, dtype=int)
+df_statsbinary = pd.concat([df_statsbinary, marital_dummies], axis=1)
+print(df_statsbinary['v2984'].value_counts())
+df_statsbinary = df_statsbinary.drop('v2984', axis=1) # Get's rid of the column still with unsorted info (which is now in dummy columns)
+
+
 
 # drops rule violations column
 output = df_statsbinary['v2517']
