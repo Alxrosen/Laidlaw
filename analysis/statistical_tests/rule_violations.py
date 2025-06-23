@@ -26,7 +26,8 @@ variables = df[['v2500',                            # Education
                 'v0046',                            # U.S. born
                 'v0058',                            # Marital Status
                 #'v1056'                            # State
-                'v2984'                             # Facility ID
+                'v2984',                            # Facility ID
+                #'v0718'                             # Age when Sentenced
                 ]]
 
 #limit to Yes and No for educational group  --> TODO June 21st Is this correct??
@@ -38,7 +39,6 @@ df_statsbinary = variables[
 df_statsbinary['v2517'] = df_statsbinary['v2517'].apply(lambda v: 1 if v == 'Yes' else 0)
 
 # Education to binary
-print(df_statsbinary['v2500'].value_counts())
 df_statsbinary['v2500'] = df_statsbinary['v2500'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -46,7 +46,6 @@ df_statsbinary['v2500'] = df_statsbinary['v2500'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2500'])
 df_statsbinary['v2500'] = df_statsbinary['v2500'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2500'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2500': 'community_Education' 
 })
@@ -77,7 +76,6 @@ df_statsbinary = df_statsbinary.rename(columns={
 '''
 
 # Child Rearing to binary
-print(df_statsbinary['v2514'].value_counts())
 df_statsbinary['v2514'] = df_statsbinary['v2514'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -85,13 +83,11 @@ df_statsbinary['v2514'] = df_statsbinary['v2514'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2514'])
 df_statsbinary['v2514'] = df_statsbinary['v2514'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2514'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2514': 'community_Child Rearing' 
 })
 
 # Inmate-Assistance to binary
-print(df_statsbinary['v2511'].value_counts())
 df_statsbinary['v2511'] = df_statsbinary['v2511'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -99,13 +95,11 @@ df_statsbinary['v2511'] = df_statsbinary['v2511'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2511'])
 df_statsbinary['v2511'] = df_statsbinary['v2511'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2511'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2511': 'community_Inmate Assistance' 
 })
 
 # Life Skills to binary
-print(df_statsbinary['v2515'].value_counts())
 df_statsbinary['v2515'] = df_statsbinary['v2515'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -113,13 +107,11 @@ df_statsbinary['v2515'] = df_statsbinary['v2515'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2515'])
 df_statsbinary['v2515'] = df_statsbinary['v2515'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2515'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2515': 'community_Life Skills' 
 })
 
 # Pre-Release Programs to binary
-print(df_statsbinary['v2516'].value_counts())
 df_statsbinary['v2516'] = df_statsbinary['v2516'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -127,13 +119,11 @@ df_statsbinary['v2516'] = df_statsbinary['v2516'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2516'])
 df_statsbinary['v2516'] = df_statsbinary['v2516'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2516'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2516': 'community_Pre-Release' 
 })
 
 # Race/Ethnicity to binary
-print(df_statsbinary['v2510'].value_counts())
 df_statsbinary['v2510'] = df_statsbinary['v2510'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -141,13 +131,11 @@ df_statsbinary['v2510'] = df_statsbinary['v2510'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2510'])
 df_statsbinary['v2510'] = df_statsbinary['v2510'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2510'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2510': 'community_Race/Ethnicity' 
 })
 
 # Religious to binary
-print(df_statsbinary['v2509'].value_counts())
 df_statsbinary['v2509'] = df_statsbinary['v2509'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -155,13 +143,11 @@ df_statsbinary['v2509'] = df_statsbinary['v2509'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2509'])
 df_statsbinary['v2509'] = df_statsbinary['v2509'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2509'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2509': 'community_Religion'
 })
 
 # Self-Help to binary
-print(df_statsbinary['v2512'].value_counts())
 df_statsbinary['v2512'] = df_statsbinary['v2512'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -169,13 +155,11 @@ df_statsbinary['v2512'] = df_statsbinary['v2512'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2512'])
 df_statsbinary['v2512'] = df_statsbinary['v2512'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2512'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2512': 'community_Self-Help' 
 })
 
 # Vocational to binary
-print(df_statsbinary['v2513'].value_counts())
 df_statsbinary['v2513'] = df_statsbinary['v2513'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -183,7 +167,6 @@ df_statsbinary['v2513'] = df_statsbinary['v2513'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v2513'])
 df_statsbinary['v2513'] = df_statsbinary['v2513'].apply(lambda v: 1 if v == 'Yes' else 0)
-print(df_statsbinary['v2513'].value_counts())
 df_statsbinary = df_statsbinary.rename(columns={
     'v2513': 'community_Vocational' 
 })
@@ -205,6 +188,9 @@ df_statsbinary = df_statsbinary.rename(columns={
 '''
 
 # Sentence sentence --> approximately how many years they have been incarcerated
+'''
+Here, I rely on the edited data from the v0717 flag
+'''
 df_statsbinary['v0717'] = df_statsbinary['v0717'].apply(lambda v: 1 if v == "Year field changed to 2004" else 0)
 df_statsbinary['v0715'] = np.where(
     df_statsbinary['v0717'] == 1,  
@@ -219,11 +205,14 @@ df_statsbinary['v0715'] = df_statsbinary['v0715'].apply(lambda v: int(v) if not 
 df_statsbinary = df_statsbinary.dropna(subset=['v0715'])
 df_statsbinary['v0715'] = df_statsbinary['v0715'].apply(lambda v: 2004 - v)
 df_statsbinary = df_statsbinary.rename(columns={
-    'v0715': 'Sentence Length' 
+    'v0715': 'control_Sentence length' 
 })
 
 
-# convert gender to binary
+# convert sex to binary
+'''
+Checks if they are Male for regression
+'''
 df_statsbinary['v0004'] = df_statsbinary['v0004'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -232,7 +221,7 @@ df_statsbinary['v0004'] = df_statsbinary['v0004'].apply(lambda v: v if not \
 df_statsbinary = df_statsbinary.dropna(subset=['v0004'])
 df_statsbinary['v0004'] = df_statsbinary['v0004'].apply(lambda v: 1 if v == 'Male' else 0) # 1 = Male, 0 = Female
 df_statsbinary = df_statsbinary.rename(columns={
-    'v0004': 'Male' 
+    'v0004': 'control_Sex' 
 })
 
 
@@ -245,7 +234,7 @@ df_statsbinary['v0013'] = df_statsbinary['v0013'].apply(lambda v: int(v) if not 
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v0013'])
 df_statsbinary = df_statsbinary.rename(columns={
-    'v0013': 'Age' 
+    'v0013': 'control_Age' 
 })
 
 #convert race categories to binary
@@ -275,7 +264,7 @@ df_statsbinary['v0018'] = df_statsbinary['v0018'].apply(lambda v: v if not \
 df_statsbinary = df_statsbinary.dropna(subset=['v0018'])
 df_statsbinary['v0018'] = df_statsbinary['v0018'].apply(lambda v: 0 if v == 'No' else 1)
 df_statsbinary = df_statsbinary.rename(columns={
-    'v0018': 'Hispanic'
+    'v0018': 'control_Hispanic'
 })
 
 #convert U.S. Born categories to binary
@@ -287,7 +276,7 @@ df_statsbinary['v0046'] = df_statsbinary['v0046'].apply(lambda v: v if not \
 df_statsbinary = df_statsbinary.dropna(subset=['v0046'])
 df_statsbinary['v0046'] = df_statsbinary['v0046'].apply(lambda v: 1 if v == 'United States' else 0)
 df_statsbinary = df_statsbinary.rename(columns={
-    'v0046': 'U.S. Born'
+    'v0046': 'control_U.S. Born'
 })
 
 #convert Marital Status categories to binary
@@ -297,7 +286,7 @@ df_statsbinary['v0058'] = df_statsbinary['v0058'].apply(lambda v: v if not \
                                             v == 'Refused')
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v0058'])
-marital_dummies = pd.get_dummies(df_statsbinary['v0058'], prefix='marital', dtype=int)
+marital_dummies = pd.get_dummies(df_statsbinary['v0058'], prefix='control_marital', dtype=int)
 df_statsbinary = pd.concat([df_statsbinary, marital_dummies], axis=1)
 df_statsbinary = df_statsbinary.drop('v0058', axis=1)
 
@@ -322,7 +311,6 @@ df_statsbinary = df_statsbinary.drop('v1056', axis=1)
 # 401 - 439 (Federal Facilities)
 # '''
 #Creates multicollinearity (or dummy variable trap?)
-print(df_statsbinary['v2984'].value_counts())
 df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -330,12 +318,25 @@ df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if not \
                                             else None)
 df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if v < 401 else None) 
 df_statsbinary = df_statsbinary.dropna(subset=['v2984'])
-marital_dummies = pd.get_dummies(df_statsbinary['v2984'], prefix='facility', drop_first=True, dtype=int)
+marital_dummies = pd.get_dummies(df_statsbinary['v2984'], prefix='control_facilityID', drop_first=True, dtype=int)
 df_statsbinary = pd.concat([df_statsbinary, marital_dummies], axis=1)
-print(df_statsbinary['v2984'].value_counts())
 df_statsbinary = df_statsbinary.drop('v2984', axis=1) # Get's rid of the column still with unsorted info (which is now in dummy columns)
 
-
+# Age when Sentenced
+'''
+Removed because not enough people: <100
+'''
+# print(df_statsbinary['v0718'].value_counts())
+# df_statsbinary['v0718'] = df_statsbinary['v0718'].apply(lambda v: int(v) if not \
+#                                             (v == 'Blank') or
+#                                             (v == 'Don\'t know') or
+#                                             (v == 'Refused')
+#                                             else None)
+# df_statsbinary = df_statsbinary.dropna(subset=['v0718'])
+# print(df_statsbinary['v0718'].value_counts())
+# df_statsbinary = df_statsbinary.rename(columns={
+#     'v0718': 'control_Age when sentenced' 
+# })
 
 # drops rule violations column
 output = df_statsbinary['v2517']
