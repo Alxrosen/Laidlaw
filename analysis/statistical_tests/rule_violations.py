@@ -17,7 +17,9 @@ variables = df[['v2500',                            # Education
                 'v2512',                            # Self-Help
                 'v2513',                            # Vocational (Ever, NOT currently)
                 'v2517',                            # Rule violations
-                'v0029', 'v0030', 'v0031', 'v0032', 'v0033', 'v0034', 'v0035', #Race
+                'v0037', 'v0038', 'v0039', 'v0040', 'v0041', # Race (Allocated)
+                'v0042',                            # Race - Other (commented out)
+                'v0043',                            # Race - Unknown (commented out)
                 'v0018',                            # Latino / Hispanic
                 'v0715',                            # Sentence Length
                 'v0717',                            # Sentence Length Changed to 2004 Flag
@@ -27,10 +29,10 @@ variables = df[['v2500',                            # Education
                 'v0058',                            # Marital Status
                 #'v1056'                            # State
                 'v2984',                            # Facility ID
-                #'v0718'                             # Age when Sentenced
+                #'v0718'                            # Age when Sentenced
+                'v1198'                             # Age at first arrest
                 ]]
 
-#limit to Yes and No for educational group  --> TODO June 21st Is this correct??
 df_statsbinary = variables[
     ((variables['v2517'] == 'Yes') |
     (variables['v2517'] == 'No'))]
@@ -221,11 +223,14 @@ df_statsbinary['v0004'] = df_statsbinary['v0004'].apply(lambda v: v if not \
 df_statsbinary = df_statsbinary.dropna(subset=['v0004'])
 df_statsbinary['v0004'] = df_statsbinary['v0004'].apply(lambda v: 1 if v == 'Male' else 0) # 1 = Male, 0 = Female
 df_statsbinary = df_statsbinary.rename(columns={
-    'v0004': 'control_Sex' 
+    'v0004': 'control_Sex (Male)' 
 })
 
 
 # Age
+'''
+Dropped people who had "0" age
+'''
 df_statsbinary['v0013'] = df_statsbinary['v0013'].apply(lambda v: int(v) if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -237,23 +242,25 @@ df_statsbinary = df_statsbinary.rename(columns={
     'v0013': 'control_Age' 
 })
 
-#convert race categories to binary
-df_statsbinary['v0029'] = df_statsbinary['v0029'].apply(lambda v: 1 if v != 'Blank' else 0)
-df_statsbinary['v0030'] = df_statsbinary['v0030'].apply(lambda v: 1 if v != 'Blank' else 0)
-df_statsbinary['v0031'] = df_statsbinary['v0031'].apply(lambda v: 1 if v != 'Blank' else 0)
-df_statsbinary['v0032'] = df_statsbinary['v0032'].apply(lambda v: 1 if v != 'Blank' else 0)
-df_statsbinary['v0033'] = df_statsbinary['v0033'].apply(lambda v: 1 if v != 'Blank' else 0)
-df_statsbinary['v0034'] = df_statsbinary['v0034'].apply(lambda v: 1 if v != 'Blank' else 0)
-df_statsbinary['v0035'] = df_statsbinary['v0035'].apply(lambda v: 1 if v != 'Blank' else 0)
+# Convert race categories to binary (allocated race columns)
+'''
+Uses allocated race instead of self-described. Then, drops the responses for the 27 individuals for whom all race values are Blank.
+Used the largest category, White, as the comparison case. 
+'''
+race_cols = ['v0037', 'v0038', 'v0039', 'v0040', 'v0041', 'v0042', 'v0043']
+df_statsbinary = df_statsbinary[df_statsbinary[race_cols].apply(lambda row: not all(val == 'Blank' for val in row), axis=1)]
+for column in race_cols:
+    df_statsbinary[column] = df_statsbinary[column].apply(lambda v: 1 if v != 'Blank' else 0)
 df_statsbinary = df_statsbinary.rename(columns={
-    'v0029': 'race_White',
-    'v0030': 'race_Black',
-    'v0031': 'race_American Indian Or Alaskan Native',
-    'v0032': 'race_Asian',
-    'v0033': 'race_Hawaiian Or Pacific Islander',
-    'v0034': 'race_Other',
-    'v0035': 'race_Unknown'
+    'v0037': 'control_race_White',
+    'v0038': 'control_race_Black',
+    'v0039': 'control_race_American Indian Or Alaskan Native',
+    'v0040': 'control_race_Asian',
+    'v0041': 'control_race_Hawaiian Or Pacific Islander',
+    'v0042': 'control_race_Other',     # Commented out: Other race   
+    'v0043': 'control_race_Unknown'   # Commented out: Unknown race
 })
+df_statsbinary = df_statsbinary.drop(['control_race_White'], axis = 1)
 
 #convert hispanic categories to binary
 df_statsbinary['v0018'] = df_statsbinary['v0018'].apply(lambda v: v if not \
@@ -280,15 +287,19 @@ df_statsbinary = df_statsbinary.rename(columns={
 })
 
 #convert Marital Status categories to binary
+'''
+Chose to drop control_marital_Married to set that as the baseline group (having removed Blank, DK, and Refused) 
+'''
 df_statsbinary['v0058'] = df_statsbinary['v0058'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
                                             v == 'Refused')
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v0058'])
-marital_dummies = pd.get_dummies(df_statsbinary['v0058'], prefix='control_marital', dtype=int)
+marital_dummies = pd.get_dummies(df_statsbinary['v0058'], prefix='control_marital', drop_first = False, dtype=int) #Instead, dropping manually below
 df_statsbinary = pd.concat([df_statsbinary, marital_dummies], axis=1)
 df_statsbinary = df_statsbinary.drop('v0058', axis=1)
+df_statsbinary = df_statsbinary.drop('control_marital_Married', axis=1)
 
 #convert State Residency during arrest categories to binary
 '''
@@ -305,22 +316,20 @@ df_statsbinary = df_statsbinary.drop('v1056', axis=1)
 '''
 
 # By-Facility Factor -- 
-# '''
-# Dropped Federal Facilities 
-# 101 - 387 (State Facilities)
-# 401 - 439 (Federal Facilities)
-# '''
-#Creates multicollinearity (or dummy variable trap?)
+'''
+Note: This data only includes State Facilities. Federal are in the other data set. Chose to drop first because data is anonymized and first has a large sample size
+'''
 df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
                                             v == 'Refused')
                                             else None)
-df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if v < 401 else None) 
+df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if v < 401 else None)  # optional, supposed to remove federal (but none)
 df_statsbinary = df_statsbinary.dropna(subset=['v2984'])
-marital_dummies = pd.get_dummies(df_statsbinary['v2984'], prefix='control_facilityID', drop_first=True, dtype=int)
-df_statsbinary = pd.concat([df_statsbinary, marital_dummies], axis=1)
+facility_dummies = pd.get_dummies(df_statsbinary['v2984'], prefix='control_facilityID', drop_first=True, dtype=int) 
+df_statsbinary = pd.concat([df_statsbinary, facility_dummies], axis=1)
 df_statsbinary = df_statsbinary.drop('v2984', axis=1) # Get's rid of the column still with unsorted info (which is now in dummy columns)
+# df_statsbinary = df_statsbinary.drop('control_facilityID_', axis=1)
 
 # Age when Sentenced
 '''
@@ -328,9 +337,9 @@ Removed because not enough people: <100
 '''
 # print(df_statsbinary['v0718'].value_counts())
 # df_statsbinary['v0718'] = df_statsbinary['v0718'].apply(lambda v: int(v) if not \
-#                                             (v == 'Blank') or
-#                                             (v == 'Don\'t know') or
-#                                             (v == 'Refused')
+#                                             (v == 'Blank' or
+#                                             v == 'Don\'t know' or
+#                                             v == 'Refused')
 #                                             else None)
 # df_statsbinary = df_statsbinary.dropna(subset=['v0718'])
 # print(df_statsbinary['v0718'].value_counts())
@@ -338,19 +347,27 @@ Removed because not enough people: <100
 #     'v0718': 'control_Age when sentenced' 
 # })
 
-# drops rule violations column
-output = df_statsbinary['v2517']
-inputs = df_statsbinary.drop(['v2517'], axis = 1)
+# Age at first arrest
+df_statsbinary['v1198'] = df_statsbinary['v1198'].apply(lambda v: int(v) if not \
+                                            (v == 'Blank' or
+                                            v == 'Don\'t know' or
+                                            v == 'Refused')
+                                            else None)
+df_statsbinary = df_statsbinary.dropna(subset=['v1198'])
+df_statsbinary = df_statsbinary.rename(columns={
+    'v1198': 'control_Age at first arrest'
+})
 
+# drops rule violations column and incarceration flag
+output = df_statsbinary['v2517']
+inputs = df_statsbinary.drop(['v2517', 'v0717'], axis = 1)
+
+# Show odds values as well
+pd.set_option('display.max_rows', None)    # Show all rows
 log_reg = sm.Logit(output, inputs).fit()
 print(log_reg.summary())
-
-
-#print(df[df['v0715'].str.isnumeric().fillna(False)]['v0715'].value_counts().index.min()) #Debugging
-
-'''
-YEAR FIRST ADMITTED
-'''
+odds_ratios = np.exp(log_reg.params)
+print("\n\n ========== Odds ========== \n\n", odds_ratios)
 
 '''
 Throw EVERYTHING in there, controls for each of these. The coef are independent so creates unique effect of each one
