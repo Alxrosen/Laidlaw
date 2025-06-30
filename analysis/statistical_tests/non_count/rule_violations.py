@@ -29,6 +29,7 @@ variables = df[['v2500',                            # Education
                 'v0058',                            # Marital Status
                 #'v1056'                            # State
                 'v2984',                            # Facility ID
+                'v1056',                            # State Residence at Arrest
                 #'v0718'                            # Age when Sentenced
                 'v1198'                             # Age at first arrest
                 ]]
@@ -304,25 +305,51 @@ df_statsbinary = df_statsbinary.drop('control_marital_Married', axis=1)
 #convert State Residency during arrest categories to binary
 '''
 Creates multicollinearity (or dummy variable trap?)
+'''
+'''
 df_statsbinary['v1056'] = df_statsbinary['v1056'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
                                             v == 'Refused')
                                             else None)
 df_statsbinary = df_statsbinary.dropna(subset=['v1056'])
-marital_dummies = pd.get_dummies(df_statsbinary['v1056'], prefix='state', dtype=int)
-df_statsbinary = pd.concat([df_statsbinary, marital_dummies], axis=1)
+state_dummies = pd.get_dummies(df_statsbinary['v1056'], prefix='state', drop_first=True, dtype=int)
+df_statsbinary = pd.concat([df_statsbinary, state_dummies], axis=1)
 df_statsbinary = df_statsbinary.drop('v1056', axis=1)
 '''
 
 # Facility Size Variable
 #df_statsbinary['facility_size'] = df_statsbinary['v2984'].apply(lambda v: (df_statsbinary['v2984'] == v).sum())
 
+# Residence
+#V1056
+
+
+# Facility Location
+'''
+Sets the facility location as where the majority of the incarcerated individuals there had residence prior to their arrest. Collinearity with Facility ID
+'''
+'''
+df_statsbinary['v1056'] = df_statsbinary['v1056'].apply(lambda v: v if not \
+                                            (v == 'Blank' or
+                                            v == 'Don\'t know' or
+                                            v == 'Refused')
+                                            else None)
+df_statsbinary = df_statsbinary.dropna(subset=['v1056'])
+df_statsbinary['facility_location'] = df_statsbinary['v2984'].apply(
+    lambda facility: df_statsbinary[df_statsbinary['v2984'] == facility]['v1056'].mode()[0]
+)
+location_dummies = pd.get_dummies(df_statsbinary['facility_location'], prefix='control_facility_location', drop_first = False, dtype=int) #Instead, dropping manually below
+df_statsbinary = pd.concat([df_statsbinary, location_dummies], axis=1)
+df_statsbinary = df_statsbinary.drop('v1056', axis=1)
+df_statsbinary = df_statsbinary.drop('facility_location', axis=1)
+df_statsbinary = df_statsbinary.drop('control_facility_location_Texas', axis=1)
+'''
+
 # By-Facility Factor -- 
 '''
 Note: This data only includes State Facilities. Federal are in the other data set. Chose to drop first because data is anonymized and first has a large sample size
 '''
-
 df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -334,7 +361,6 @@ facility_dummies = pd.get_dummies(df_statsbinary['v2984'], prefix='control_facil
 df_statsbinary = pd.concat([df_statsbinary, facility_dummies], axis=1)
 df_statsbinary = df_statsbinary.drop('v2984', axis=1) # Get's rid of the column still with unsorted info (which is now in dummy columns)
 # df_statsbinary = df_statsbinary.drop('control_facilityID_', axis=1)
-
 
 # Age when Sentenced
 '''
@@ -368,7 +394,9 @@ output = df_statsbinary['v2517']
 inputs = df_statsbinary.drop(['v2517', 'v0717'], axis = 1)
 
 # Show odds values as well
-pd.set_option('display.max_rows', None)    # Show all rows
+pd.set_option('display.max_rows', None)                  # Show all rows
+#print(inputs.dtypes)                                    # Debugging
+inputs = inputs.apply(pd.to_numeric, errors='raise')     # Debugging
 log_reg = sm.Logit(output, inputs).fit()
 print(log_reg.summary())
 odds_ratios = np.exp(log_reg.params)
