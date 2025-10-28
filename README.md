@@ -1,0 +1,2 @@
+# Introduction
+Solitary confinement is often criticized as being one of the most cruel punishments utilized by the U.S. Criminal Justice System. In it, individuals are deprived of human contact and, as a result, can develop disorders that prevent them from reintegrating into society. This study sought to establish whether the opposite of that punishment might therefore have the opposite effect. Specifically, it examines the effect of community groups — such as religious or educational groups — on rule violation rates in correctional facilities.
