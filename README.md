@@ -14,3 +14,6 @@ This shows that, for “other major rule violations” (including slowdowns, foo
 ### Other Significant Figures
 
 <img width="1470" height="939" alt="Control Variables with Odds Ratios" src="https://github.com/user-attachments/assets/25410a17-9b95-4385-96a9-5ab1bbf9c996" />
+
+# Future Directions
+Future Directions One research opportunity worth exploring consists in abstracting the data to state-level recidivism rates as related to state-level availability of communities. Here, we identified the state (location) of each facility through the mode pre-incarceration residence of its incarcerated population. While this is only an estimate, it does seem to be relatively accurate. Using this information, future studies can analyze if there is a correlation between state community group involvement rates and their recidivism rates in 2004. This could give more meaningful results by using recidivism instead of rule violations, but it would also serve to understand the availability of community groups in prisons around the United States.
