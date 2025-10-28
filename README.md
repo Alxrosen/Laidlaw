@@ -30,3 +30,14 @@ The lack of timing data for rule violations also limited our findings as it prev
 
 ### Availability of Community
 Groups and Security Level Because of the anonymous nature of the survey, there was no way of discriminating between facilities with respect to their availability of community groups and to security level. Controlling for Facility ID would not prevent this, as a maximum security prison with no rule violations and no community groups would count the same as a prison where no one joined community groups and still did not commit rule violations. This likely skewed our results towards a positive correlation.
+
+
+# Thank Yous
+
+Thank you to Prof. Adam Reich for his advising during this project. 
+
+Thank you to Nick Deas for being amazing and for basically teaching me stats. 
+
+Thank you to the Laidlaw Fellowship and the Columbia Undergraduate Scholars Program for making this possible. 
+
+Thank you to Dean Lang and Lavinia Lorch for being the best advisors I could ask for. 
