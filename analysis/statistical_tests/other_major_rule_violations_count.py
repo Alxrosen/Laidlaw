@@ -379,7 +379,7 @@ inputs = df_statsbinary.drop(['v2542', 'v2543', 'v0717'], axis = 1)
 
 # Show odds values as well
 pd.set_option('display.max_rows', None)    # Show all rows
-log_reg = sm.ZeroInflatedNegativeBinomialP(output, inputs).fit()
+log_reg = sm.ZeroInflatedNegativeBinomialP(output, inputs).fit() #ZeroInflatedNegativeBinomialP(output, inputs).fit()
 print(log_reg.summary())
 odds_ratios = np.exp(log_reg.params)
 print("\n\n ========== Odds ========== \n\n", odds_ratios)

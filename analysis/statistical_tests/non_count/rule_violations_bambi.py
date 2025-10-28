@@ -1,3 +1,4 @@
+# %% 
 import arviz as az
 import bambi as bmb
 import matplotlib.pyplot as plt
@@ -5,6 +6,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
+#%%
 #Read the csv file
 df = pd.read_csv('/Users/alexrosen/Laidlaw/data/prison_survey.csv')
     
@@ -394,10 +396,11 @@ df_statsbinary = df_statsbinary.rename(columns={
     'v1198': 'control_Age_at_first_arrest'
 })
 
+#%%
 def run(df_statsbinary):
     # drops rule violations column and incarceration flag
     output = df_statsbinary['v2517']
-    inputs = df_statsbinary.drop(['v2517', 'v0717', 'v2984'], axis = 1)
+    inputs = df_statsbinary.drop(['v2517', 'v0717', 'v2984'], axis=1)
     fixed_effects = inputs.columns.tolist() 
     print("\n\n\n", fixed_effects)
     inputs_li = ' + '.join(fixed_effects)
@@ -409,13 +412,21 @@ def run(df_statsbinary):
         family="bernoulli", 
         link="logit")
 
-    # Fit the model
     fitted = model.fit(draws=2000, tune=1000, chains=4, cores=1)
-
-    # Get summary (includes credible intervals instead of p-values)
+    
+    # Calculate WAIC
+    '''j
+    waic = az.waic(fitted)
+    print("\n\n ========== Model Fit Statistics ========== \n")
+    print(f"WAIC: {waic.waic:.2f}")
+    print(f"WAIC Standard Error: {waic.se:.2f}")
+    print(f"Effective Number of Parameters (p_waic): {waic.p_waic:.2f}")
+    '''
+    # Print full summary
+    print("\n\n ========== Model Summary ========== \n")
     print(az.summary(fitted))
 
-    # Calculate odds ratios from posterior samples
+    # Odds ratio posterior sample
     posterior = fitted.posterior
 
     print("\n\n ========== Odds Ratios (Mean and 95% CI) ========== \n")
@@ -429,6 +440,25 @@ def run(df_statsbinary):
             ci_upper = np.percentile(odds_ratio_samples, 97.5)
             
             print(f"{param}: {mean_or:.3f} (95% CI: {ci_lower:.3f} - {ci_upper:.3f})")
+    
+    # Transform for plotting
+    fitted_transformed = fitted.copy()
+    for var in fixed_effects:
+        if var in fitted.posterior.data_vars:
+            fitted_transformed.posterior[var] = np.exp(fitted.posterior[var])
+
+    # Plot forest plot
+    available_vars = [var for var in fixed_effects if var in fitted.posterior.data_vars]
+    az.plot_forest(fitted_transformed, var_names=available_vars)
+    plt.axvline(x=1, color='red', linestyle='--', alpha=0.7)
+    plt.title('Odds Ratios with 95% Credible Intervals')
+    plt.xlabel('Odds Ratio')
+    plt.show()
+    
+    # Return WAIC for model comparison
+    #return fitted, waic
+
 
 if __name__ == "__main__":
     run(df_statsbinary)
+# %%

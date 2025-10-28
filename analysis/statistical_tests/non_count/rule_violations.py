@@ -27,9 +27,8 @@ variables = df[['v2500',                            # Education
                 'v0013',                            # age
                 'v0046',                            # U.S. born
                 'v0058',                            # Marital Status
-                #'v1056'                            # State
+                #'v1056'                            # State Residence at Arrest
                 'v2984',                            # Facility ID
-                'v1056',                            # State Residence at Arrest
                 #'v0718'                            # Age when Sentenced
                 'v1198'                             # Age at first arrest
                 ]]
@@ -350,6 +349,7 @@ df_statsbinary = df_statsbinary.drop('control_facility_location_Texas', axis=1)
 '''
 Note: This data only includes State Facilities. Federal are in the other data set. Chose to drop first because data is anonymized and first has a large sample size
 '''
+
 df_statsbinary['v2984'] = df_statsbinary['v2984'].apply(lambda v: v if not \
                                             (v == 'Blank' or
                                             v == 'Don\'t know' or
@@ -361,6 +361,7 @@ facility_dummies = pd.get_dummies(df_statsbinary['v2984'], prefix='control_facil
 df_statsbinary = pd.concat([df_statsbinary, facility_dummies], axis=1)
 df_statsbinary = df_statsbinary.drop('v2984', axis=1) # Get's rid of the column still with unsorted info (which is now in dummy columns)
 # df_statsbinary = df_statsbinary.drop('control_facilityID_', axis=1)
+
 
 # Age when Sentenced
 '''
