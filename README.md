@@ -10,3 +10,7 @@ The results of this study were unambiguous and contrary to our hypothesis: invol
 <img width="641" height="406" alt="Zero-Inflated Negative Binomial of Other Major Rule Violations" src="https://github.com/user-attachments/assets/65b2bcb3-d150-4244-b70b-8643175799d5" />
 
 This shows that, for “other major rule violations” (including slowdowns, food strikes, setting fires, rioting, etc.), certain community groups, specifically educational, life skills, religious, and self-help, correlated with a decrease in rule violations. However, this is only statistically significant for self-help groups (p = 0.046) and almost statistically significant for educational groups (p= 0.052).
+
+### Other Significant Figures
+
+<img width="1470" height="939" alt="Control Variables with Odds Ratios" src="https://github.com/user-attachments/assets/25410a17-9b95-4385-96a9-5ab1bbf9c996" />
