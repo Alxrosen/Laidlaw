@@ -1,0 +1,16 @@
+# Introduction
+Solitary confinement is often criticized as being one of the most cruel punishments utilized by the U.S. Criminal Justice System. In it, individuals are deprived of human contact and, as a result, can develop disorders that prevent them from reintegrating into society. This study sought to establish whether the opposite of that punishment might therefore have the opposite effect. Specifically, it examines the effect of community groups — such as religious or educational groups — on rule violation rates in correctional facilities.
+
+# Methods 
+Here, we analyzed the “Survey of Inmates in State and Federal Correctional Facilities, 2004” by the Bureau of Justice and Statistics. It includes 14,499 x 3,000 data entries of incarcerated individuals in state facilities. We chose the 2004 version because, unlike others, it included a “Facility ID,” which we controlled for. Note: we used state not federal facilities, as this provided a geographic distribution. We relied on a logistic regression to model correlation between involvement in community groups and rule violations. We also controlled for confounding variables (race, Hispanic, sentence length, sex, age, U.S. born, age at first arrest, marital status, Facility ID).
+
+# Results 
+The results of this study were unambiguous and contrary to our hypothesis: involvement in any community group is correlated with an increase in overall rule violation rates, some of which (education, inmate assistance, child-rearing, life skills, and race/ethnic) were statistically significant (p<0.05). This is evident both in the disparity between the rule violation rates of group members versus non-group members as well as in the statistical analysis. To better show these results, we include the following sample comparison showing the group with the highest percentage difference: the GED group. Separately, this study also finds that, while involvement in community groups is correlated with a statistically significant (p<0.05) greater rate of rule violations, it is also correlated with a smaller rate of certain major rule violations (albeit with a less significant p-value). We conducted this analysis by using a Zero-Inflated Negative Binomial distribution on the violation category with the highest number of entries: “Other Major Rule Violations.”This yielded us the following statistical output. 
+
+<img width="641" height="406" alt="Zero-Inflated Negative Binomial of Other Major Rule Violations" src="https://github.com/user-attachments/assets/65b2bcb3-d150-4244-b70b-8643175799d5" />
+
+This shows that, for “other major rule violations” (including slowdowns, food strikes, setting fires, rioting, etc.), certain community groups, specifically educational, life skills, religious, and self-help, correlated with a decrease in rule violations. However, this is only statistically significant for self-help groups (p = 0.046) and almost statistically significant for educational groups (p= 0.052).
+
+### Other Significant Figures
+
+<img width="1470" height="939" alt="Control Variables with Odds Ratios" src="https://github.com/user-attachments/assets/25410a17-9b95-4385-96a9-5ab1bbf9c996" />
