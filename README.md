@@ -34,7 +34,7 @@ Groups and Security Level Because of the anonymous nature of the survey, there w
 
 # Thank Yous
 
-Thank you to Prof. Adam Reich for his advising during this project. 
+Thank you to Prof. Adam Reich for his invaluable support and guidance during this project. 
 
 Thank you to Nick Deas for being amazing and for basically teaching me stats. 
 
